@@ -1,69 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { Survey } from './survey.entity';
+import { Question } from './question.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DataSource } from 'typeorm';
-import { Question } from 'src/question/question.entity';
 
 //tentar, ao final de tudo, exibir a survey toda montada -> no objeto da survey (talvez possa ser u, model separado) ter o question e o option
 @Injectable()
-export class SurveyService {
+export class QuestionService {
   //como o repository é a tabela, tÔ injetando a tabela aqui no service (para que eu possa manipular)
   constructor(
-    @InjectRepository(Survey)
-    private surveysRepository: Repository<any>,
+    @InjectRepository(Question)
+    private questionsRepository: Repository<any>,
     private dataSource: DataSource,
   ) {}
 
-  async getAllSurveys(): Promise<Array<object>> {
+  //aqui já posso user o find one by
+  async getAllQuestions(): Promise<Array<object>> {
     return await this.dataSource
-      .getRepository(Survey)
-      .createQueryBuilder('survey')
+      .getRepository(Question)
+      .createQueryBuilder('question')
       .getMany();
   }
 
-  async getSurveyById(id: number): Promise<Survey> {
+  async getQuestionById(id: number): Promise<Question> {
     return await this.dataSource
-      .getRepository(Survey)
-      .createQueryBuilder('survey')
-      .where('survey.id = :id', { id: id })
+      .getRepository(Question)
+      .createQueryBuilder('question')
+      .where('question.id = :id', { id: id })
       .getOne();
   }
 
-  async createSurvey(survey): Promise<object> {
+  async createQuestion(question): Promise<object> {
     return await this.dataSource
       .createQueryBuilder()
       .insert()
-      .into(Survey)
-      .values(survey)
+      .into(Question)
+      .values(question)
       .execute();
   }
 
   //prnsei em fazer dessa maneira pq as vezes to no getOne da survey e posso aproveitar o parametro que ja estará na url
-  async updateSurvey(id: number, survey: Survey): Promise<object> {
+  async updateQuestion(id: number, question: Question): Promise<object> {
     return await this.dataSource
       .createQueryBuilder()
-      .update(Survey)
+      .update(Question)
       .set({
-        title: survey.title,
-        about: survey.about,
-        enabled: survey.enabled,
+        content: question.content,
+        enabled: question.enabled,
+        surveyId: question.surveyId,
         updatedAt: new Date(),
       })
-      .where('survey.id = :id', { id: id })
+      .where('question.id = :id', { id: id })
       .execute();
   }
 
-  async deleteSurvey(id: number) {
+  async deleteQuestion(id: number) {
     return await this.dataSource
       .createQueryBuilder()
-      .update(Survey)
+      .update(Question)
       .set({
         enabled: false,
         deleted: true,
         deletedAt: new Date(),
       })
-      .where('survey.id = :id', { id: id })
+      .where('question.id = :id', { id: id })
       .execute();
   }
 }
