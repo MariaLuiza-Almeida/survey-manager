@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Question } from './question.entity';
+import { Question } from './question.class';
 import { QuestionService } from './question.service';
 
 @Controller('question')

@@ -1,65 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { DataSource } from 'typeorm';
-import { Option } from './option.entity';
+import { Option } from './option.class';
 
 @Injectable()
 export class OptionService {
   constructor(
     @InjectRepository(Option)
-    private optionRepository: Repository<any>,
-    private dataSource: DataSource,
+    private option: Option,
   ) {}
 
-  async getAllOptions(): Promise<Array<object>> {
-    return await this.dataSource
-      .getRepository(Option)
-      .createQueryBuilder('option')
-      .getMany();
+  async getAllOptions(): Promise<any> {
+    console.log('bate no service');
+    return this.option.getAllOptions();
   }
 
   async getOptionById(id: number): Promise<Option> {
-    return await this.dataSource
-      .getRepository(Option)
-      .createQueryBuilder('option')
-      .where('option.id = :id', { id: id })
-      .getOne();
+    return this.option.getOptionById(id);
   }
 
   async createOption(option): Promise<object> {
-    return await this.dataSource
-      .createQueryBuilder()
-      .insert()
-      .into(Option)
-      .values(option)
-      .execute();
+    return this.option.createOption(option);
   }
 
   async updateOption(id: number, option: Option): Promise<object> {
-    return await this.dataSource
-      .createQueryBuilder()
-      .update(Option)
-      .set({
-        content: option.content,
-        enabled: option.enabled,
-        questionId: option.questionId,
-        updatedAt: new Date(),
-      })
-      .where('option.id = :id', { id: id })
-      .execute();
+    return this.option.updateOption(id, option);
   }
 
   async deleteOption(id: number) {
-    return await this.dataSource
-      .createQueryBuilder()
-      .update(Option)
-      .set({
-        enabled: false,
-        deleted: true,
-        deletedAt: new Date(),
-      })
-      .where('option.id = :id', { id: id })
-      .execute();
+    return this.option.deleteOption(id);
   }
 }
