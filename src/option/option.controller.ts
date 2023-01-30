@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Option } from './option.entity';
+import { Option } from './option.class';
 import { OptionService } from './option.service';
 
 @Controller('option')
@@ -22,6 +22,11 @@ export class OptionController {
   @Get(':id')
   getOne(@Param() params): Promise<Option> {
     return this.optionService.getOptionById(params.id);
+  }
+
+  @Get('/full/:questionid')
+  getQuestionOptions(@Param() params): Promise<Option> {
+    return this.optionService.getOptionsByQuestionId(params.questionid);
   }
 
   @Post()

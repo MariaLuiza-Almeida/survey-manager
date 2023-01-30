@@ -4,21 +4,17 @@ import { AppService } from './app.service';
 import { SurveyController } from './survey/survey.controller';
 import { SurveyService } from './survey/survey.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Survey } from './survey/survey.entity';
+import { Survey } from './survey/survey.class';
 import { DataSource } from 'typeorm';
 import { SurveyModule } from './survey/survey.module';
-import { Question } from './question/question.entity';
+import { Question } from './question/question.class';
 import { QuestionController } from './question/question.controller';
 import { QuestionService } from './question/question.service';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
 import { OptionController } from './option/option.controller';
 import { OptionService } from './option/option.service';
-import { Option } from './option/option.entity';
-import { Form } from './form/form.entity';
-import { FormModule } from './form/form.module';
-import { FormController } from './form/form.controller';
-import { FormService } from './form/form.service';
+import { Option } from './option/option.class';
 
 @Module({
   imports: [
@@ -29,27 +25,27 @@ import { FormService } from './form/form.service';
       username: 'root',
       password: 'estopa',
       database: 'surveymanager',
-      entities: [Survey, Question, Option, Form],
+      entities: [Survey, Question, Option],
       synchronize: true,
     }),
     SurveyModule,
     QuestionModule,
     OptionModule,
-    FormModule,
   ],
   controllers: [
     AppController,
     SurveyController,
     QuestionController,
     OptionController,
-    FormController,
   ],
   providers: [
     AppService,
     SurveyService,
     QuestionService,
     OptionService,
-    FormService,
+    Survey,
+    Question,
+    Option,
   ],
 })
 export class AppModule {

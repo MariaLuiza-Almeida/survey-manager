@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Question } from './question.entity';
+import { Question } from './question.class';
 import { QuestionService } from './question.service';
 
 @Controller('question')
@@ -24,6 +24,11 @@ export class QuestionController {
   @Get(':id')
   getOne(@Param() params): Promise<Question> {
     return this.questionService.getQuestionById(params.id);
+  }
+
+  @Get('/full/:surveyid')
+  getSurveyQuestions(@Param() params): Promise<Question> {
+    return this.questionService.getQuestionBySurveyId(params.surveyid);
   }
 
   //Create a question
