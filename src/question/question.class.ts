@@ -54,6 +54,14 @@ export class Question {
       .getOne();
   }
 
+  async getQuestionBySurveyId(surveyId: number): Promise<any> {
+    return await this.dataSource
+      .getRepository(Question)
+      .createQueryBuilder('question')
+      .where('question.surveyId = :id', { id: surveyId })
+      .getMany();
+  }
+
   async createQuestion(question): Promise<object> {
     return await this.dataSource
       .createQueryBuilder()

@@ -26,6 +26,11 @@ export class QuestionController {
     return this.questionService.getQuestionById(params.id);
   }
 
+  @Get('/full/:surveyid')
+  getSurveyQuestions(@Param() params): Promise<Question> {
+    return this.questionService.getQuestionBySurveyId(params.surveyid);
+  }
+
   //Create a question
   @Post()
   create(@Body() question: Question): Promise<object> {

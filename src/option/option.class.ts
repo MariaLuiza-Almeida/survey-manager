@@ -17,6 +17,7 @@ export class Option {
     private optionRepository: Repository<any>,
     private dataSource: DataSource,
   ) {}
+
   @PrimaryGeneratedColumn()
   id?: number;
 
@@ -38,7 +39,7 @@ export class Option {
   @DeleteDateColumn()
   deletedAt?: Date;
 
-  async getAllOptions(): Promise<any> {
+  async getAllOptions(): Promise<Array<object>> {
     return await this.dataSource
       .getRepository(Option)
       .createQueryBuilder('option')
@@ -51,6 +52,14 @@ export class Option {
       .createQueryBuilder('option')
       .where('option.id = :id', { id: id })
       .getOne();
+  }
+
+  async getOptionByQuestionId(questionId: number): Promise<any> {
+    return await this.dataSource
+      .getRepository(Option)
+      .createQueryBuilder('option')
+      .where('option.questionId = :id', { id: questionId })
+      .getMany();
   }
 
   async createOption(option): Promise<object> {
@@ -82,6 +91,7 @@ export class Option {
       .update(Option)
       .set({
         enabled: false,
+        deleted: true,
         deletedAt: new Date(),
       })
       .where('option.id = :id', { id: id })

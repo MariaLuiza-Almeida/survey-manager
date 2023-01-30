@@ -24,6 +24,11 @@ export class OptionController {
     return this.optionService.getOptionById(params.id);
   }
 
+  @Get('/full/:questionid')
+  getQuestionOptions(@Param() params): Promise<Option> {
+    return this.optionService.getOptionsByQuestionId(params.questionid);
+  }
+
   @Post()
   create(@Body() option: Option): Promise<object> {
     return this.optionService.createOption(option);

@@ -13,6 +13,10 @@ export class QuestionService {
     return this.question.getQuestionById(id);
   }
 
+  async getQuestionBySurveyId(surveyId: number): Promise<Question> {
+    return this.question.getQuestionBySurveyId(surveyId);
+  }
+
   async createQuestion(question): Promise<object> {
     return this.question.createQuestion(question);
   }

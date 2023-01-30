@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ISurvey } from './ISurvey.interface';
 import { Survey } from './survey.class';
 @Injectable()
 export class SurveyService {
@@ -12,8 +13,8 @@ export class SurveyService {
     return this.survey.getSurveyById(id);
   }
 
-  async getTotalSurvey(id: number): Promise<Survey> {
-    return this.survey.getTotalSurveyForm(id);
+  async getTotalSurvey(id: number, fullForm: ISurvey): Promise<Survey> {
+    return this.survey.getTotalSurveyForm(id, fullForm);
   }
 
   async createSurvey(survey): Promise<object> {

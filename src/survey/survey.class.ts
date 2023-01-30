@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Option } from 'src/option/option.class';
 import { Question } from 'src/question/question.class';
+import { ISurvey } from './ISurvey.interface';
 import {
   Entity,
   Column,
@@ -17,6 +19,8 @@ import {
 @Entity()
 export class Survey {
   constructor(
+    private question: Question,
+    private option: Option,
     @InjectRepository(Survey)
     private surveysRepository: Repository<any>,
     private dataSource: DataSource,
@@ -59,13 +63,20 @@ export class Survey {
       .getOne();
   }
 
-  async getTotalSurveyForm(id: number): Promise<any> {
-    return await this.dataSource
-      .getRepository(Survey)
-      .createQueryBuilder('survey')
-      .leftJoinAndSelect('question.surveyId', 'question')
-      .where('survey.id = :id', { id: id })
-      .getMany();
+  async getTotalSurveyForm(id: number, fullForm: ISurvey): Promise<any> {
+    this.getSurveyById(id).then((res) => {
+      fullForm.surveyName = res.title;
+    });
+    this.question.getQuestionBySurveyId(id).then((result) => {
+      fullForm.surveyQuestions = result;
+      result.forEach((question) => {
+        this.option.getOptionByQuestionId(question.id).then((options) => {
+          fullForm.QuetionsOption = options;
+        });
+      });
+    });
+
+    return fullForm;
   }
 
   async createSurvey(survey): Promise<object> {
